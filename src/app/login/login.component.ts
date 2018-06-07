@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs'
 import { map, catchError } from 'rxjs/operators';
@@ -9,28 +9,26 @@ const httpOptions = {
   withCredentials: true
 };
 
-
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class AppComponent {
-  title = 'app';
+export class LoginComponent implements OnInit {
 
-  constructor(private http: HttpClient, private router: Router) {
+  username: string;
+  password: string;
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit() {
+    this.username = 'yyy';
+    this.password = 'hhh';
   }
-
-  tt() {
-    debugger;
-    this.http.get('https://localhost:44342/api/t/aa', httpOptions).pipe(
-      map(x => {
-        debugger;
-        return null;
-      }),
-      catchError(this.handleError('', []))
+  login() {
+    this.http.post('https://localhost:44342/api/ll/login', { Email: this.username, Password: this.password, RememberMe: false }, httpOptions).pipe(
+      catchError(this.handleError('login', {}))
     ).subscribe();
-
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -38,13 +36,6 @@ export class AppComponent {
       debugger;
       // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
-
-      if (error.status === 401) {
-        this.router.navigate(['login']);
-        alert('No Authorize!!!!')
-      }
-
-
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
