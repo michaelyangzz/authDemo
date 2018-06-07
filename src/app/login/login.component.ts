@@ -28,7 +28,10 @@ export class LoginComponent implements OnInit {
   login() {
     this.http.post('https://localhost:44342/api/ll/login', { Email: this.username, Password: this.password, RememberMe: false }, httpOptions).pipe(
       catchError(this.handleError('login', {}))
-    ).subscribe();
+    ).subscribe(
+      x => { if (x) alert('login success');
+             else alert('failed!!'); }
+    );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
